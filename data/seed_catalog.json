@@ -1,0 +1,22 @@
+[
+  {"name": "Wireless Mouse", "price": 79900, "stock": 50, "category": "Electronics"},
+  {"name": "Mechanical Keyboard", "price": 349900, "stock": 30, "category": "Electronics"},
+  {"name": "USB-C Hub", "price": 129900, "stock": 40, "category": "Electronics"},
+  {"name": "Laptop Backpack", "price": 189900, "stock": 25, "category": "Accessories"},
+  {"name": "Water Bottle 1L", "price": 39900, "stock": 100, "category": "Accessories"},
+  {"name": "Notebook Set", "price": 29900, "stock": 80, "category": "Stationery"},
+  {"name": "Wireless Earbuds", "price": 249900, "stock": 35, "category": "Electronics"},
+  {"name": "Desk Lamp", "price": 99900, "stock": 20, "category": "Home"},
+  {"name": "Phone Stand", "price": 24900, "stock": 60, "category": "Accessories"},
+  {"name": "Portable Charger 10000mAh", "price": 159900, "stock": 45, "category": "Electronics"},
+  {"name": "Blue Light Glasses", "price": 69900, "stock": 30, "category": "Accessories"},
+  {"name": "Coffee Mug", "price": 34900, "stock": 70, "category": "Home"},
+  {"name": "Sticky Notes Pack", "price": 14900, "stock": 90, "category": "Stationery"},
+  {"name": "HDMI Cable 2m", "price": 44900, "stock": 55, "category": "Electronics"},
+  {"name": "Desk Organizer", "price": 89900, "stock": 25, "category": "Home"},
+  {"name": "Bluetooth Speaker", "price": 199900, "stock": 20, "category": "Electronics"},
+  {"name": "Ballpoint Pen Set", "price": 19900, "stock": 100, "category": "Stationery"},
+  {"name": "Laptop Sleeve", "price": 74900, "stock": 40, "category": "Accessories"},
+  {"name": "Table Fan", "price": 129900, "stock": 15, "category": "Home"},
+  {"name": "Cable Organizer", "price": 12900, "stock": 65, "category": "Accessories"}
+]
