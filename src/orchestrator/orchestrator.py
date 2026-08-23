@@ -1,3 +1,4 @@
+from src.orchestrator.approval import create_approval_request
 import hashlib
 import json
 import uuid
@@ -85,7 +86,8 @@ def create_order(db, session_id: str, product_id: int, quantity: int) -> dict:
     )
     db.add(order)
     db.commit()
-
+    if needs_approval:
+        create_approval_request(db, order)
     log_event(
         db, session_id=session_id, order_id=order.id, actor="orchestrator",
         event_type="order_created", action="create_order",

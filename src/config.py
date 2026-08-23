@@ -13,7 +13,7 @@ RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 SESSION_SPEND_LIMIT = 500000  # ₹5000
 
 # Maximum amount allowed for a single order without human approval
-PER_TRANSACTION_LIMIT = 150000  # ₹1500
+PER_TRANSACTION_LIMIT = 500000  # ₹1500
 
 # Any order above this amount requires human approval before proceeding
 APPROVAL_THRESHOLD = 150000  # ₹1500 (same as per-transaction limit for now)
