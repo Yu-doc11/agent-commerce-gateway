@@ -1,10 +1,11 @@
+from src.payments.razorpay_client import create_razorpay_order, simulate_payment_capture
 from src.orchestrator.approval import create_approval_request
 import hashlib
 import json
 import uuid
 from datetime import datetime, timezone
 
-from src.db.models import Order, AgentSession, Product
+from src.db.models import Order, AgentSession, Product,Payment
 from src.orchestrator.guardrails import (
     check_session_budget,
     check_transaction_limit,
@@ -88,6 +89,10 @@ def create_order(db, session_id: str, product_id: int, quantity: int) -> dict:
     db.commit()
     if needs_approval:
         create_approval_request(db, order)
+    else:
+        session.budget_spent += order_amount
+        db.commit()
+        finalize_payment(db, order)
     log_event(
         db, session_id=session_id, order_id=order.id, actor="orchestrator",
         event_type="order_created", action="create_order",
@@ -99,3 +104,36 @@ def create_order(db, session_id: str, product_id: int, quantity: int) -> dict:
     )
 
     return {"status": order_status, "order_id": order.id, "amount": order_amount}
+def finalize_payment(db, order: Order) -> None:
+    """
+    Creates the real Razorpay order and simulates the payment capture.
+    Called only after guardrails have passed (either auto-created or
+    approved by a human) — never before.
+    """
+    rp_order = create_razorpay_order(order.amount, receipt=order.id)
+    order.razorpay_order_id = rp_order["id"]
+
+    capture = simulate_payment_capture(rp_order["id"], order.amount)
+
+    payment = Payment(
+        id=str(uuid.uuid4()),
+        order_id=order.id,
+        razorpay_payment_id=capture["id"],
+        status=capture["status"],
+        amount=order.amount,
+        captured_at=datetime.now(timezone.utc),
+    )
+    db.add(payment)
+    db.commit()
+
+    log_event(
+        db, session_id=order.session_id, order_id=order.id, actor="orchestrator",
+        event_type="payment_captured", action="finalize_payment",
+        input_payload=None,
+        output_payload=json.dumps({
+            "razorpay_order_id": rp_order["id"],
+            "razorpay_payment_id": capture["id"]
+        }),
+        decision="allowed", reason="Payment captured (real Razorpay order, simulated capture)",
+        amount_involved=order.amount, running_budget_spent=None,
+    )
