@@ -32,13 +32,14 @@ with st.sidebar:
         )
         db.add(session)
         db.commit()
+        session_id = session.id
         db.close()
 
         with st.spinner("Agent is shopping..."):
             transcript = run_buyer_agent(session.id, goal)
 
         st.session_state["last_transcript"] = transcript
-        st.session_state["last_session_id"] = session.id
+        st.session_state["last_session_id"] = session_id
         st.rerun()
 
 col1, col2 = st.columns(2)
